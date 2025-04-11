@@ -1,0 +1,49 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+LAYOUT_WITH_LEGEND()
+Person(user, "Пользователь")
+System_Boundary(s1, "Smart Home Platform") {
+    Container(apigw, "API Gateway", "Python", "Маршрутизация и прокси")
+    Container(auth, "Auth Service", "Python", "Регистрация и логин")
+    Container(heating, "Heating Control Service", "Python", "Управление отоплением")
+    Container(light, "Lighting Control Service", "Python", "Управление освещением")
+    Container(security, "Security Monitoring Service", "Python", "Системы наблюдения")
+    Container(gate, "Gate Control Service", "Python", "Управление воротами")
+    Container(heating_db, "Heating DB", "PostgreSQL", "Хранение данных отопления")
+    Container(light_db, "Lighting DB", "PostgreSQL", "Хранение данных освещения")
+    Container(security_db, "Security DB", "PostgreSQL", "Хранение данных наблюдения")
+    Container(gate_db, "Gate DB", "PostgreSQL", "Хранение данных о воротах")
+    Container(billing, "Billing Service", "Python", "Учёт и выставление счетов")
+    Container(notify, "Notification Service", "Python", "Уведомления")
+    Container(analytics, "Analytics Service", "Python", "Отчёты и история")
+    Container(kafka, "Kafka", "Apache Kafka", "Event bus")
+}
+System_Ext(extpay, "Платёжная система")
+System_Ext(devices, "IoT устройства")
+System_Ext(ext_notification, "Email/sms/push Services")
+
+Rel(user, apigw, "HTTP")
+Rel(apigw, auth, "Auth API")
+Rel(apigw, heating, "Heating API")
+Rel(apigw, light, "Lighting API")
+Rel(apigw, security, "Security API")
+Rel(apigw, gate, "Gate API")
+Rel(apigw, billing, "Billing API")
+
+Rel(heating, heating_db, "CRUD")
+Rel(light, light_db, "CRUD")
+Rel(security, security_db, "CRUD")
+Rel(gate, gate_db, "CRUD")
+
+Rel(billing, extpay, "Оплата")
+Rel(devices, kafka, "Push events")
+
+Rel(kafka, heating, "Consumer")
+Rel(kafka, light, "Consumer")
+Rel(kafka, security, "Consumer")
+Rel(kafka, gate, "Consumer")
+Rel(kafka, notify, "Consumer")
+Rel(kafka, analytics, "Consumer")
+
+Rel(notify, ext_notification, "Отправка email/sms/push-уведомлений")
+@enduml
