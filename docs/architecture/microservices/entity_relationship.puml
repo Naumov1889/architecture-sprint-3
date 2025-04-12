@@ -1,0 +1,79 @@
+@startuml
+skinparam linetype ortho
+!theme plain
+
+' Основные сущности (только самые необходимые)
+entity "users" as users {
+  *user_id : UUID <<PK>>
+  --
+  *username : VARCHAR
+  *password_hash : VARCHAR
+}
+
+entity "devices" as devices {
+  *device_id : UUID <<PK>>
+  --
+  *name : VARCHAR
+  *type : VARCHAR
+  *status : VARCHAR
+  *user_id : UUID <<FK>>
+}
+
+entity "device_settings" as settings {
+  *setting_id : UUID <<PK>>
+  --
+  *device_id : UUID <<FK>>
+  *settings_data : JSONB
+}
+
+entity "events" as events {
+  *event_id : UUID <<PK>>
+  --
+  *device_id : UUID <<FK>>
+  *timestamp : TIMESTAMP
+  *event_type : VARCHAR
+  *data : JSONB
+}
+
+entity "notifications" as notifications {
+  *notification_id : UUID <<PK>>
+  --
+  *user_id : UUID <<FK>>
+  *content : TEXT
+  *is_read : BOOLEAN
+}
+
+entity "schedules" as schedules {
+  *schedule_id : UUID <<PK>>
+  --
+  *user_id : UUID <<FK>>
+  *device_id : UUID <<FK>>
+  *action : VARCHAR
+  *schedule_time : VARCHAR
+}
+
+entity "zones" as zones {
+  *zone_id : UUID <<PK>>
+  --
+  *name : VARCHAR
+  *user_id : UUID <<FK>>
+}
+
+entity "device_zones" as device_zones {
+  *device_id : UUID <<FK>>
+  *zone_id : UUID <<FK>>
+}
+
+' Отношения
+users ||--o{ devices : owns
+devices ||--o{ events : generates
+devices ||--|| settings : has
+events --o{ notifications : triggers
+users ||--o{ notifications : receives
+users ||--o{ schedules : creates
+devices ||--o{ schedules : controlled_by
+users ||--o{ zones : creates
+zones ||--o{ device_zones : contains
+devices ||--o{ device_zones : belongs_to
+
+@enduml

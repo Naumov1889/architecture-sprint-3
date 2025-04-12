@@ -175,11 +175,19 @@
 
 **Диаграмма кода (Code)**
 
-Добавьте одну диаграмму или несколько.
+- security control
+[puml](./docs/architecture/microservices//code/security.puml)/ 
+[svg](./docs/architecture/microservices/code/security.svg)
+
 
 # Задание 3. Разработка ER-диаграммы
 
-Добавьте сюда ER-диаграмму. Она должна отражать ключевые сущности системы, их атрибуты и тип связей между ними.
+
+[Ссылка ER-диаграмму в модели C4 на PlantUML](./docs/architecture/microservices/entity_relationship.puml)
+
+То же самое в виде картинки:
+
+![отрендеренная ER-диаграмма на PlantUML](./docs/architecture/microservices/entity_relationship.svg)
 
 
 # ❌ Задание 4. Создание и документирование API
