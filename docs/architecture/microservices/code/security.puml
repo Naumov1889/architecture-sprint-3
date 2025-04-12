@@ -1,0 +1,165 @@
+@startuml
+!theme plain
+' Main API Class
+class SecurityAPI {
+  -SecurityController controller
+  +get_security_status()
+  +get_cameras()
+  +get_sensors()
+  +arm_system()
+  +disarm_system()
+  +get_recordings(date_from, date_to)
+  +stream_camera(camera_id)
+  +configure_device(device_id, config)
+}
+
+' Controller Class
+class SecurityController {
+  -DeviceManager device_manager
+  -DataStore data_store
+  -VideoProcessor video_processor
+  +get_system_status()
+  +list_devices()
+  +arm_security_system()
+  +disarm_security_system()
+  +handle_motion_event(event)
+  +handle_sensor_alert(alert)
+  +fetch_recordings(criteria)
+  +get_live_stream(camera_id)
+  +update_device_config(device_id, config)
+}
+
+' Device Manager
+class DeviceManager {
+  -Map<String, Device> connected_devices
+  +discover_devices()
+  +connect_device(device_id)
+  +disconnect_device(device_id)
+  +get_device_status(device_id)
+  +send_command(device_id, command)
+  +configure_device(device_id, settings)
+  +get_camera_stream(camera_id)
+}
+
+' Data Store
+class DataStore {
+  -Database connection
+  +save_event(event_data)
+  +save_recording_metadata(metadata)
+  +get_events(filters)
+  +get_recordings(filters)
+  +update_system_status(status)
+  +get_system_status()
+  +save_device_config(device_id, config)
+}
+
+' Kafka Consumer
+class KafkaConsumer {
+  -SecurityController controller
+  -KafkaConnection connection
+  +start_consuming()
+  +stop_consuming()
+  -process_message(message)
+  -route_event(event)
+}
+
+' Video Processor
+class VideoProcessor {
+  -ML_model motion_detection_model
+  +process_video_frame(frame)
+  +detect_motion(frame)
+  +detect_objects(frame)
+  +recognize_faces(frame)
+  +save_recording(video_data)
+  +extract_frame(video_id, timestamp)
+}
+
+' Device Abstract Class
+abstract class Device {
+  #String device_id
+  #String device_type
+  #String status
+  +get_status()
+  +send_command(command)
+}
+
+' Camera Class
+class Camera {
+  -resolution
+  -frame_rate
+  -recording_settings
+  +start_streaming()
+  +stop_streaming()
+  +start_recording()
+  +stop_recording()
+  +pan_tilt_zoom(direction)
+  +adjust_settings(settings)
+}
+
+' Sensor Class
+class Sensor {
+  -sensor_type
+  -sensitivity
+  -trigger_threshold
+  +calibrate()
+  +get_reading()
+  +set_sensitivity(level)
+  +set_threshold(value)
+}
+
+' Event Class
+class SecurityEvent {
+  -timestamp
+  -event_type
+  -device_id
+  -priority
+  -data
+  +to_dict()
+}
+
+' Database Models
+class EventModel {
+  -id
+  -timestamp
+  -event_type
+  -device_id
+  -priority
+  -data
+  -processed
+}
+
+class RecordingModel {
+  -id
+  -camera_id
+  -start_time
+  -end_time
+  -file_path
+  -triggered_by
+  -tags
+}
+
+class DeviceModel {
+  -id
+  -type
+  -name
+  -location
+  -status
+  -configuration
+  -last_seen
+}
+
+' Relationships
+SecurityAPI --> SecurityController : uses
+SecurityController --> DeviceManager : manages
+SecurityController --> DataStore : uses
+SecurityController --> VideoProcessor : uses
+KafkaConsumer --> SecurityController : sends events to
+DataStore --> EventModel : creates/updates
+DataStore --> RecordingModel : creates/updates
+DataStore --> DeviceModel : creates/updates
+Device <|-- Camera : extends
+Device <|-- Sensor : extends
+DeviceManager --> Device : manages
+SecurityController --> SecurityEvent : processes
+
+@enduml
