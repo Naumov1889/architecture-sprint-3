@@ -139,7 +139,39 @@
 
 **Диаграмма компонентов (Components)**
 
-Добавьте диаграмму для каждого из выделенных микросервисов.
+- auth: 
+[puml](./docs/architecture/microservices//components/auth.puml)/ 
+[svg](./docs/architecture/microservices/components/auth.svg)
+
+- notification: 
+[puml](./docs/architecture/microservices//components/notification.puml)/ 
+[svg](./docs/architecture/microservices/components/notification.svg)
+
+- analytics: 
+[puml](./docs/architecture/microservices//components/analytics.puml)/ 
+[svg](./docs/architecture/microservices/components/analytics.svg)
+
+- billing
+[puml](./docs/architecture/microservices//components/billing.puml)/ 
+[svg](./docs/architecture/microservices/components/billing.svg)
+
+- security
+[puml](./docs/architecture/microservices//components/security.puml)/ 
+[svg](./docs/architecture/microservices/components/security.svg)
+
+- heating
+[puml](./docs/architecture/microservices//components/heating.puml)/ 
+[svg](./docs/architecture/microservices/components/heating.svg)
+
+- lighting
+[puml](./docs/architecture/microservices//components/lighting.puml)/ 
+[svg](./docs/architecture/microservices/components/lighting.svg)
+
+- gate control
+[puml](./docs/architecture/microservices//components/gate.puml)/ 
+[svg](./docs/architecture/microservices/components/gate.svg)
+
+
 
 **Диаграмма кода (Code)**
 

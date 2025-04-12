@@ -1,0 +1,25 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+
+Container_Boundary(billing_service, "Billing Service") {
+    Component(billing_api, "Billing API", "FastAPI", "REST API для биллинга")
+    Component(billing_processor, "Billing Processor", "Python", "Обработка платежей")
+    Component(invoice_generator, "Invoice Generator", "Python", "Создание счетов")
+    Component(data_store, "Billing Data Store", "Python", "Хранение данных")
+}
+
+Container(api_gateway, "API Gateway", "Python", "Входная точка API")
+Container(database, "Billing Database", "PostgreSQL", "База данных биллинга")
+Container(extpay, "Платёжная система", "External")
+
+
+Rel(api_gateway, billing_api, "HTTP/REST")
+Rel(billing_api, billing_processor, "Использует")
+Rel(billing_processor, invoice_generator, "Запрашивает счета")
+Rel(billing_processor, data_store, "Обновляет данные")
+Rel(invoice_generator, data_store, "Получает данные")
+Rel(data_store, database, "SQL")
+Rel(billing_processor, extpay, "Работает с платежами")
+@enduml
