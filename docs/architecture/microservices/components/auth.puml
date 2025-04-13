@@ -1,0 +1,23 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+
+Container_Boundary(auth_service, "Auth Service") {
+    Component(auth_api, "Auth API", "FastAPI", "REST API для авторизации")
+    Component(auth_logic, "Auth Logic", "Python", "Бизнес-логика авторизации")
+    Component(token_manager, "Token Manager", "Python", "Работа с JWT токенами")
+    Component(user_dao, "User DAO", "Python", "Доступ к данным пользователей")
+    Component(db_connector, "DB Connector", "SQLAlchemy", "Подключение к базе данных")
+}
+
+Container(api_gateway, "API Gateway", "Python", "Входная точка API")
+Container(user_db, "User Database", "PostgreSQL", "База данных пользователей")
+
+Rel(api_gateway, auth_api, "HTTP/REST")
+Rel(auth_api, auth_logic, "Использует")
+Rel(auth_logic, token_manager, "Использует")
+Rel(auth_logic, user_dao, "Использует")
+Rel(user_dao, db_connector, "Использует")
+Rel(db_connector, user_db, "SQL")
+@enduml

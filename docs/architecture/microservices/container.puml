@@ -1,0 +1,41 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+LAYOUT_WITH_LEGEND()
+Person(user, "Пользователь")
+System_Boundary(s1, "Smart Home Platform") {
+    Container(apigw, "API Gateway", "Python", "Маршрутизация и прокси")
+    Container(auth, "Auth Service", "Python", "Регистрация и логин")
+    Container(auth_db, "Auth DB", "PostgreSQL", "Хранение данных пользователя")
+    Container(device_control, "Device Control Service", "Python", "Управление устройствами")
+    Container(device_control_db, "Device Control DB", "PostgreSQL", "Хранение данных устройств")
+    Container(billing, "Billing Service", "Python", "Учёт и выставление счетов")
+    Container(billing_db, "Billing DB", "PostgreSQL", "Хранение данных биллинга")
+    Container(notify, "Notification Service", "Python", "Уведомления")
+    Container(analytics, "Analytics Service", "Python", "Отчёты и история")
+    Container(analytics_db, "Analytics DB", "PostgreSQL", "Хранение данных аналитики")
+    Container(kafka, "Kafka", "Apache Kafka", "Event bus")
+}
+System_Ext(extpay, "Платёжная система")
+System_Ext(devices, "IoT устройства")
+System_Ext(ext_notification, "Email/sms/push Services")
+
+Rel(user, apigw, "HTTP")
+Rel(apigw, auth, "Auth API")
+Rel(apigw, device_control, "Device API")
+Rel(apigw, billing, "Billing API")
+
+Rel(device_control, device_control_db, "CRUD")
+Rel(billing, billing_db, "CRUD")
+Rel(analytics, analytics_db, "CRUD")
+Rel(auth, auth_db, "CRUD")
+
+Rel(billing, extpay, "Оплата")
+Rel(devices, device_control, "Отправка и получение данных")
+Rel(device_control, kafka, "Publish")
+Rel(analytics, kafka, "Publish")
+
+Rel(kafka, notify, "Consume")
+Rel(kafka, analytics, "Consume")
+
+Rel(notify, ext_notification, "Отправка email/sms/push-уведомлений")
+@enduml

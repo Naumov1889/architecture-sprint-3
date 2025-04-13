@@ -1,0 +1,30 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+
+Container_Boundary(security_service, "Security Monitoring Service") {
+    Component(security_api, "Security API", "FastAPI", "REST API для систем безопасности")
+    Component(security_controller, "Security Controller", "Python", "Логика мониторинга безопасности")
+    Component(device_manager, "Device Manager", "Python", "Управление камерами и датчиками")
+    Component(data_store, "Data Store", "Python", "Работа с БД")
+    Component(kafka_consumer, "Kafka Consumer", "Python", "Получение событий")
+    Component(video_processor, "Video Processor", "Python", "Обработка видеопотока")
+}
+
+Container(api_gateway, "API Gateway", "Python", "Входная точка API")
+Container(database, "Security DB", "PostgreSQL", "База данных безопасности")
+Container(kafka, "Kafka", "Apache Kafka", "Шина событий")
+Container(devices, "IoT устройства", "Cameras, Sensors", "Устройства безопасности")
+
+Rel(api_gateway, security_api, "HTTP/REST")
+Rel(security_api, security_controller, "Использует")
+Rel(security_controller, device_manager, "Управляет")
+Rel(security_controller, data_store, "Использует")
+Rel(security_controller, video_processor, "Использует")
+Rel(data_store, database, "SQL")
+Rel(kafka, kafka_consumer, "События")
+Rel(kafka_consumer, security_controller, "Обрабатывает события")
+Rel(device_manager, devices, "Управляет")
+Rel(devices, kafka, "Отправляет события")
+@enduml

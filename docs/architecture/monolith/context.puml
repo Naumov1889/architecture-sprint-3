@@ -1,0 +1,20 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+LAYOUT_WITH_LEGEND()
+
+Person(user, "Пользователь", "Управляет домом, получает уведомления, оплачивает услуги")
+Person(tech, "Техподдержка", "Обслуживает систему, помогает пользователям")
+System(system, "Система управления умным домом", "Монолитное приложение. Управление отоплением, мониторинг, авторизация, уведомления, оплата")
+
+System_Ext(payment, "Платёжная система", "Обработка онлайн-платежей")
+System_Ext(devices, "Устройства в доме", "Физические датчики и реле")
+System_Ext(notification, "Почтовый шлюз", "Email / SMS отправка")
+
+Rel(user, system, "Использует через веб-интерфейс")
+Rel(tech, system, "Настраивает и контролирует")
+Rel(system, payment, "Обрабатывает оплату", "HTTPS / API")
+Rel(system, devices, "Управляет, получает данные", "протоколы устройств")
+Rel(system, notification, "Отправляет уведомления", "SMTP / SMS API")
+
+@enduml

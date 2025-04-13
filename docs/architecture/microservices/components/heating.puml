@@ -1,0 +1,28 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+
+Container_Boundary(heating_service, "Heating Control Service") {
+    Component(heating_api, "Heating API", "FastAPI", "REST API для управления отоплением")
+    Component(heating_controller, "Heating Controller", "Python", "Логика управления отоплением")
+    Component(device_manager, "Device Manager", "Python", "Управление отопительными устройствами")
+    Component(data_store, "Data Store", "Python", "Работа с БД")
+    Component(kafka_consumer, "Kafka Consumer", "Python", "Получение событий")
+}
+
+Container(api_gateway, "API Gateway", "Python", "Входная точка API")
+Container(database, "Heating DB", "PostgreSQL", "База данных отопления")
+Container(kafka, "Kafka", "Apache Kafka", "Шина событий")
+Container(devices, "IoT устройства", "Thermostats, etc", "Устройства отопления")
+
+Rel(api_gateway, heating_api, "HTTP/REST")
+Rel(heating_api, heating_controller, "Использует")
+Rel(heating_controller, device_manager, "Управляет")
+Rel(heating_controller, data_store, "Использует")
+Rel(data_store, database, "SQL")
+Rel(kafka, kafka_consumer, "События")
+Rel(kafka_consumer, heating_controller, "Обрабатывает события")
+Rel(device_manager, devices, "Управляет")
+Rel(devices, kafka, "Отправляет события")
+@enduml

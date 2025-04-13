@@ -1,0 +1,25 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+
+Container_Boundary(analytics_service, "Analytics Service") {
+    Component(kafka_consumer, "Kafka Consumer", "Python", "Получает события")
+    Component(data_processor, "Data Processor", "Python", "Обрабатывает данные")
+    Component(analytics_api, "Analytics API", "FastAPI", "REST API для запросов")
+    Component(report_generator, "Report Generator", "Python", "Создает отчеты")
+    Component(data_store, "Analytics Repository", "Python", "Работа с хранилищем")
+}
+
+Container(kafka, "Kafka", "Apache Kafka", "Шина событий")
+Container(api_gateway, "API Gateway", "Python", "Входная точка API")
+Container(database, "Analytics Database", "TimescaleDB", "Хранилище данных")
+
+Rel(kafka, kafka_consumer, "События")
+Rel(kafka_consumer, data_processor, "Передает события")
+Rel(data_processor, data_store, "Сохраняет данные")
+Rel(data_store, database, "SQL")
+Rel(api_gateway, analytics_api, "HTTP/REST")
+Rel(analytics_api, report_generator, "Запрашивает отчеты")
+Rel(report_generator, data_store, "Получает данные")
+@enduml

@@ -1,0 +1,19 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+
+Container_Boundary(notification_service, "Notification Service") {
+    Component(kafka_consumer, "Kafka Consumer", "Python", "Получает события")
+    Component(notification_processor, "Notification Processor", "Python", "Обрабатывает уведомления")
+    Component(sender, "Message Sender", "Python", "Отправляет сообщения")
+}
+
+Container(kafka, "Kafka", "Apache Kafka", "Шина событий")
+Container(ext_notification, "Email/sms/push Services", "External")
+
+Rel(kafka, kafka_consumer, "События")
+Rel(kafka_consumer, notification_processor, "Передает события")
+Rel(notification_processor, sender, "Подготавливает сообщения")
+Rel(sender, ext_notification, "Отправляет email/sms/push-уведомления")
+@enduml

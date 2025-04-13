@@ -1,0 +1,28 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+
+Container_Boundary(device_service, "Device Control Service") {
+    Component(device_api, "Device API", "FastAPI", "REST API для управления устройством")
+    Component(device_controller, "Device Controller", "Python", "Логика управления устройством")
+    Component(device_manager, "Device Manager", "Python", "Управление устройствами")
+    Component(data_store, "Data Store", "Python", "Работа с БД")
+    Component(kafka_consumer, "Kafka Consumer", "Python", "Получение событий")
+}
+
+Container(api_gateway, "API Gateway", "Python", "Входная точка API")
+Container(database, "Device DB", "PostgreSQL", "База данных")
+Container(kafka, "Kafka", "Apache Kafka", "Шина событий")
+Container(devices, "IoT устройства", "Приборы")
+
+Rel(api_gateway, device_api, "HTTP/REST")
+Rel(device_api, device_controller, "Использует")
+Rel(device_controller, device_manager, "Управляет")
+Rel(device_controller, data_store, "Использует")
+Rel(data_store, database, "SQL")
+Rel(kafka, kafka_consumer, "События")
+Rel(kafka_consumer, device_controller, "Обрабатывает события")
+Rel(device_manager, devices, "Управляет")
+Rel(devices, kafka, "Отправляет события")
+@enduml
