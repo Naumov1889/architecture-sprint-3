@@ -64,6 +64,14 @@ entity "device_zones" as device_zones {
   *zone_id : UUID <<FK>>
 }
 
+entity "house" as house {
+  *house_id : UUID <<PK>>
+  --
+  *device_id : UUID <<FK>>
+  *user_id : UUID <<FK>>
+  *address : VARCHAR
+}
+
 ' Отношения
 users ||--o{ devices : owns
 devices ||--o{ events : generates
@@ -75,5 +83,8 @@ devices ||--o{ schedules : controlled_by
 users ||--o{ zones : creates
 zones ||--o{ device_zones : contains
 devices ||--o{ device_zones : belongs_to
+users ||--|| house : owns
+house ||--o{ devices : has
+
 
 @enduml

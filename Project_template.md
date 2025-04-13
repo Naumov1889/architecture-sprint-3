@@ -155,22 +155,9 @@
 [puml](./docs/architecture/microservices//components/billing.puml)/ 
 [svg](./docs/architecture/microservices/components/billing.svg)
 
-- security
-[puml](./docs/architecture/microservices//components/security.puml)/ 
-[svg](./docs/architecture/microservices/components/security.svg)
-
-- heating
-[puml](./docs/architecture/microservices//components/heating.puml)/ 
-[svg](./docs/architecture/microservices/components/heating.svg)
-
-- lighting
-[puml](./docs/architecture/microservices//components/lighting.puml)/ 
-[svg](./docs/architecture/microservices/components/lighting.svg)
-
-- gate control
-[puml](./docs/architecture/microservices//components/gate.puml)/ 
-[svg](./docs/architecture/microservices/components/gate.svg)
-
+- device
+[puml](./docs/architecture/microservices//components/device.puml)/ 
+[svg](./docs/architecture/microservices/components/device.svg)
 
 
 **Диаграмма кода (Code)**
